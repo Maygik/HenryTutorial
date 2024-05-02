@@ -13,7 +13,7 @@ using UnityEngine;
 
 namespace HenryMod.Survivors.Henry
 {
-    public class HenryItemDisplays : ItemDisplaysBase
+    public class BridgetItemDisplays : ItemDisplaysBase
     {
         protected override void SetItemDisplayRules(List<ItemDisplayRuleSet.KeyAssetRuleGroup> itemDisplayRules)
         {

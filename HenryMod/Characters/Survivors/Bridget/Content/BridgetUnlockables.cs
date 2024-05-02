@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace HenryMod.Survivors.Henry
 {
-    public static class HenryUnlockables
+    public static class BridgetUnlockables
     {
         public static UnlockableDef characterUnlockableDef = null;
         public static UnlockableDef masterySkinUnlockableDef = null;
@@ -12,9 +12,9 @@ namespace HenryMod.Survivors.Henry
         public static void Init()
         {
             masterySkinUnlockableDef = Modules.Content.CreateAndAddUnlockbleDef(
-                HenryMasteryAchievement.unlockableIdentifier,
-                Modules.Tokens.GetAchievementNameToken(HenryMasteryAchievement.identifier),
-                HenrySurvivor.instance.assetBundle.LoadAsset<Sprite>("texMasteryAchievement"));
+                BridgetMasteryAchievement.unlockableIdentifier,
+                Modules.Tokens.GetAchievementNameToken(BridgetMasteryAchievement.identifier),
+                BridgetSurvivor.instance.assetBundle.LoadAsset<Sprite>("texMasteryAchievement"));
         }
     }
 }

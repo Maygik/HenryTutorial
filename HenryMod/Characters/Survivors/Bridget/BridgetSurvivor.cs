@@ -11,10 +11,10 @@ using UnityEngine;
 
 namespace HenryMod.Survivors.Henry
 {
-    public class HenrySurvivor : SurvivorBase<HenrySurvivor>
+    public class BridgetSurvivor : SurvivorBase<BridgetSurvivor>
     {
         //used to load the assetbundle for this character. must be unique
-        public override string assetBundleName => "myassetbundle"; //if you do not change this, you are giving permission to deprecate the mod
+        public override string assetBundleName => "bridgetBundle"; //if you do not change this, you are giving permission to deprecate the mod
 
         //the name of the prefab we will create. conventionally ending in "Body". must be unique
         public override string bodyName => "HenryBody"; //if you do not change this, you get the point by now
@@ -26,7 +26,7 @@ namespace HenryMod.Survivors.Henry
         public override string modelPrefabName => "mdlHenry";
         public override string displayPrefabName => "HenryDisplay";
 
-        public const string HENRY_PREFIX = HenryPlugin.DEVELOPER_PREFIX + "_HENRY_";
+        public const string HENRY_PREFIX = BridgetPlugin.DEVELOPER_PREFIX + "_HENRY_";
 
         //used when registering your survivor's language tokens
         public override string survivorTokenPrefix => HENRY_PREFIX;
@@ -68,9 +68,9 @@ namespace HenryMod.Survivors.Henry
                 }
         };
 
-        public override UnlockableDef characterUnlockableDef => HenryUnlockables.characterUnlockableDef;
+        public override UnlockableDef characterUnlockableDef => BridgetUnlockables.characterUnlockableDef;
         
-        public override ItemDisplaysBase itemDisplays => new HenryItemDisplays();
+        public override ItemDisplaysBase itemDisplays => new BridgetItemDisplays();
 
         //set in base classes
         public override AssetBundle assetBundle { get; protected set; }
@@ -95,16 +95,16 @@ namespace HenryMod.Survivors.Henry
         public override void InitializeCharacter()
         {
             //need the character unlockable before you initialize the survivordef
-            HenryUnlockables.Init();
+            BridgetUnlockables.Init();
 
             base.InitializeCharacter();
 
-            HenryConfig.Init();
-            HenryStates.Init();
-            HenryTokens.Init();
+            BridgetConfig.Init();
+            BridgetStates.Init();
+            BridgetTokens.Init();
 
-            HenryAssets.Init(assetBundle);
-            HenryBuffs.Init(assetBundle);
+            BridgetAssets.Init(assetBundle);
+            BridgetBuffs.Init(assetBundle);
 
             InitializeEntityStateMachines();
             InitializeSkills();
@@ -119,7 +119,7 @@ namespace HenryMod.Survivors.Henry
         private void AdditionalBodySetup()
         {
             AddHitboxes();
-            bodyPrefab.AddComponent<HenryWeaponComponent>();
+            bodyPrefab.AddComponent<BridgetWeaponComponent>();
             //bodyPrefab.AddComponent<HuntressTrackerComopnent>();
             //anything else here
         }
@@ -224,12 +224,12 @@ namespace HenryMod.Survivors.Henry
                     HENRY_PREFIX + "PRIMARY_SLASH_NAME",
                     HENRY_PREFIX + "PRIMARY_SLASH_DESCRIPTION",
                     assetBundle.LoadAsset<Sprite>("texPrimaryIcon"),
-                    new EntityStates.SerializableEntityStateType(typeof(SkillStates.SlashCombo)),
+                    new EntityStates.SerializableEntityStateType(typeof(SkillStates.YoyoCombo)),
                     "Weapon",
                     true
                 ));
             //custom Skilldefs can have additional fields that you can set manually
-            primarySkillDef1.stepCount = 2;
+            primarySkillDef1.stepCount = 3;
             primarySkillDef1.stepGraceDuration = 0.5f;
 
             Skills.AddPrimarySkills(bodyPrefab, primarySkillDef1);
@@ -248,7 +248,7 @@ namespace HenryMod.Survivors.Henry
                 keywordTokens = new string[] { "KEYWORD_AGILE" },
                 skillIcon = assetBundle.LoadAsset<Sprite>("texSecondaryIcon"),
 
-                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Shoot)),
+                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Bumper)),
                 activationStateMachineName = "Weapon2",
                 interruptPriority = EntityStates.InterruptPriority.Skill,
 
@@ -287,7 +287,7 @@ namespace HenryMod.Survivors.Henry
                 skillDescriptionToken = HENRY_PREFIX + "UTILITY_ROLL_DESCRIPTION",
                 skillIcon = assetBundle.LoadAsset<Sprite>("texUtilityIcon"),
 
-                activationState = new EntityStates.SerializableEntityStateType(typeof(Roll)),
+                activationState = new EntityStates.SerializableEntityStateType(typeof(Roller)),
                 activationStateMachineName = "Body",
                 interruptPriority = EntityStates.InterruptPriority.PrioritySkill,
 
@@ -421,7 +421,7 @@ namespace HenryMod.Survivors.Henry
             //Modules.Prefabs.CloneDopplegangerMaster(bodyPrefab, masterName, "Merc");
 
             //how to set up AI in code
-            HenryAI.Init(bodyPrefab, masterName);
+            BridgetAI.Init(bodyPrefab, masterName);
 
             //how to load a master set up in unity, can be an empty gameobject with just AISkillDriver components
             //assetBundle.LoadMaster(bodyPrefab, masterName);
@@ -435,7 +435,7 @@ namespace HenryMod.Survivors.Henry
         private void RecalculateStatsAPI_GetStatCoefficients(CharacterBody sender, R2API.RecalculateStatsAPI.StatHookEventArgs args)
         {
 
-            if (sender.HasBuff(HenryBuffs.armorBuff))
+            if (sender.HasBuff(BridgetBuffs.armorBuff))
             {
                 args.armorAdd += 300;
             }

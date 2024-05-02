@@ -1,16 +1,23 @@
 ﻿using EntityStates;
 using HenryMod.Survivors.Henry;
+using IL.RoR2.Achievements;
 using RoR2;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
 
 namespace HenryMod.Survivors.Henry.SkillStates
 {
-    public class Roll : BaseSkillState
+    public class Roller : BaseSkillState
     {
-        public static float duration = 0.5f;
-        public static float initialSpeedCoefficient = 5f;
-        public static float finalSpeedCoefficient = 2.5f;
+
+        public static float initialSpeedCoefficient = 1.5f;
+        public static float maxSpeedCoefficient = 5f;
+
+        public static float windUpThreshold = 0.2f;
+        public static float windDownThreshold = 0.5f;
+        public static float duration = 1.25f;
+
 
         public static string dodgeSoundString = "HenryRoll";
         public static float dodgeFOV = global::EntityStates.Commando.DodgeState.dodgeFOV;
@@ -19,6 +26,19 @@ namespace HenryMod.Survivors.Henry.SkillStates
         private Vector3 forwardDirection;
         private Animator animator;
         private Vector3 previousPosition;
+
+
+        enum ERollingState
+        {
+            NotRolling,
+            WindingUp,
+            Rolling,
+            WindingDown,
+        }
+        ERollingState rollingState = ERollingState.NotRolling;
+
+
+
 
         public override void OnEnter()
         {
@@ -36,11 +56,13 @@ namespace HenryMod.Survivors.Henry.SkillStates
             float num = Vector3.Dot(forwardDirection, rhs);
             float num2 = Vector3.Dot(forwardDirection, rhs2);
 
+            rollingState = ERollingState.WindingUp;
+
             RecalculateRollSpeed();
 
             if (characterMotor && characterDirection)
             {
-                characterMotor.velocity.y = 0f;
+                //characterMotor.velocity.y = 0f;
                 characterMotor.velocity = forwardDirection * rollSpeed;
             }
 
@@ -52,14 +74,25 @@ namespace HenryMod.Survivors.Henry.SkillStates
 
             if (NetworkServer.active)
             {
-                characterBody.AddTimedBuff(HenryBuffs.armorBuff, 3f * duration);
+                characterBody.AddTimedBuff(BridgetBuffs.armorBuff, 3f * duration);
                 characterBody.AddTimedBuff(RoR2Content.Buffs.HiddenInvincibility, 0.5f * duration);
             }
         }
 
         private void RecalculateRollSpeed()
         {
-            rollSpeed = moveSpeedStat * Mathf.Lerp(initialSpeedCoefficient, finalSpeedCoefficient, fixedAge / duration);
+            switch(rollingState)
+            {
+                case ERollingState.WindingUp:
+                    rollSpeed = moveSpeedStat * Mathf.Lerp(initialSpeedCoefficient, maxSpeedCoefficient, fixedAge / (duration * windUpThreshold));
+                    break;
+                case ERollingState.Rolling:
+                    rollSpeed = moveSpeedStat * maxSpeedCoefficient;
+                    break;
+                case ERollingState.WindingDown:
+                    rollSpeed = moveSpeedStat * Mathf.Lerp(initialSpeedCoefficient, maxSpeedCoefficient, (fixedAge - (duration * windDownThreshold)) / (duration - (duration * windDownThreshold)));
+                    break;
+            }                        
         }
 
         public override void FixedUpdate()
@@ -76,7 +109,7 @@ namespace HenryMod.Survivors.Henry.SkillStates
                 Vector3 vector = normalized * rollSpeed;
                 float d = Mathf.Max(Vector3.Dot(vector, forwardDirection), 0f);
                 vector = forwardDirection * d;
-                vector.y = 0f;
+                vector.y = characterMotor.velocity.y;
 
                 characterMotor.velocity = vector;
             }

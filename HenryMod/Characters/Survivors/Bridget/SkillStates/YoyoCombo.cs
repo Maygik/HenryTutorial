@@ -4,14 +4,14 @@ using UnityEngine;
 
 namespace HenryMod.Survivors.Henry.SkillStates
 {
-    public class SlashCombo : BaseMeleeAttack
+    public class YoyoCombo : BaseMeleeAttack
     {
         public override void OnEnter()
         {
             hitboxGroupName = "SwordGroup";
 
             damageType = DamageType.Generic;
-            damageCoefficient = HenryStaticValues.swordDamageCoefficient;
+            damageCoefficient = BridgetStaticValues.swordDamageCoefficient;
             procCoefficient = 1f;
             pushForce = 300f;
             bonusForce = Vector3.zero;
@@ -31,12 +31,17 @@ namespace HenryMod.Survivors.Henry.SkillStates
 
             swingSoundString = "HenrySwordSwing";
             hitSoundString = "";
-            muzzleString = swingIndex % 2 == 0 ? "SwingLeft" : "SwingRight";
-            playbackRateParam = "Slash.playbackRate";
-            swingEffectPrefab = HenryAssets.swordSwingEffect;
-            hitEffectPrefab = HenryAssets.swordHitImpactEffect;
 
-            impactSound = HenryAssets.swordHitSoundEvent.index;
+            if (swingIndex % 3 == 0) muzzleString = "SwingLeft";
+            if (swingIndex % 3 == 1) muzzleString = "SwingRight";
+            if (swingIndex % 3 == 2) muzzleString = "SwingRight";
+
+
+            playbackRateParam = "Slash.playbackRate";
+            swingEffectPrefab = BridgetAssets.swordSwingEffect;
+            hitEffectPrefab = BridgetAssets.swordHitImpactEffect;
+
+            impactSound = BridgetAssets.swordHitSoundEvent.index;
 
             base.OnEnter();
         }

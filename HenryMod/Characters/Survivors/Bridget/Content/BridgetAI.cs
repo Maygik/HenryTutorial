@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace HenryMod.Survivors.Henry
 {
-    public static class HenryAI
+    public static class BridgetAI
     {
         public static void Init(GameObject bodyPrefab, string masterName)
         {

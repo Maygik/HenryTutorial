@@ -33,7 +33,7 @@ namespace HenryMod.Modules
             AssetBundle assetBundle = null;
             try
             {
-                assetBundle = AssetBundle.LoadFromFile(Path.Combine(Path.GetDirectoryName(HenryPlugin.instance.Info.Location), "AssetBundles", bundleName));
+                assetBundle = AssetBundle.LoadFromFile(Path.Combine(Path.GetDirectoryName(BridgetPlugin.instance.Info.Location), "AssetBundles", bundleName));
             }
             catch (System.Exception e)
             {

@@ -6,7 +6,7 @@ namespace HenryMod.Modules
 {
     public static class Config
     {
-        public static ConfigFile MyConfig = HenryPlugin.instance.Config;
+        public static ConfigFile MyConfig = BridgetPlugin.instance.Config;
 
         /// <summary>
         /// automatically makes config entries for disabling survivors

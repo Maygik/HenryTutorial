@@ -2,11 +2,11 @@
 
 namespace HenryMod.Survivors.Henry
 {
-    public static class HenryStates
+    public static class BridgetStates
     {
         public static void Init()
         {
-            Modules.Content.AddEntityState(typeof(SlashCombo));
+            Modules.Content.AddEntityState(typeof(YoyoCombo));
 
             Modules.Content.AddEntityState(typeof(Shoot));
 
